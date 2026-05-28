@@ -1,4 +1,6 @@
 from wiideck import *
+import sys
+from pynput.keyboard import Key
 
 threshold = 2.3 #g
 
@@ -7,13 +9,19 @@ threshold = 2.3 #g
         # Up    Right   Down    Left
 cmds = [[None, None, None, None],                       # no presses
         [[S,"sfx/CrowdYay.wav"], [S,"sfx/CrowdOh.wav"], [S,"sfx/CrowdAw.wav"], [S,"sfx/coqui.mp3"]], # A press
-        [[S, "sfx/heavenly-music.mp3"], [S,"sfx/air-horn.mp3"], [S,"sfx/vine-boom.mp3"], None],    # B press
+        [[S, "sfx/heavenly-music.wav"], [S,"sfx/air-horn.mp3"], [S,"sfx/vine-boom.wav"], None],    # B press
         [None, None, [S, "sfx/mmm-6.mp3"], None],]         # A + B
 
 # button-based macros
 
-macros = {"Home" : [K,"ctrl+down"],
-          "Minus": [K,"ctrl+left"],
-          "Plus" : [K,"ctrl+right"]}
+macros = {"Home" : [K,[Key.ctrl, Key.up]],
+          "Minus": [K,[Key.ctrl, Key.left]],
+          "Plus" : [K,[Key.ctrl, Key.right]],
+          "Left" : [K,[Key.left]],
+          "Right": [K,[Key.right]],
+          }
 
-wiideck(cmds, g(threshold), macros)
+if sys.platform != 'darwin':
+    wiideck(cmds, g(threshold), macros)
+else:
+    wiimac(cmds, g(threshold), macros)

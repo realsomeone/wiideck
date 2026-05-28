@@ -1,4 +1,3 @@
-import wiimote
 import time
 import actions
 
@@ -19,18 +18,22 @@ def g(g): # to wii
 #     thresh = g(gs)
 
 def wiideck(actionmatrix, thresh, xtras):
-    # keyboard.add_hotkey("n", downthresh)
-    # keyboard.add_hotkey("m", upthresh)
+    import wiimote
 
     input("Press SYNC, then hit enter... ")
     mote = wiimote.find()[0]
     wm = wiimote.connect(mote[0])
+    
+    mainloop(actionmatrix, thresh, xtras, wm)
+    
+def mainloop(actionmatrix, thresh, xtras, wm):
+    
+    wm.leds[3] = True
     saved = time.time()
     time.sleep(1)
     curr = wm.accelerometer
-    last = tuple(curr)
+    last = tuple(curr[i] for i in range(3))
     cooldown = 0.250
-    lock = False
     
     while True:
         d = False
@@ -52,7 +55,7 @@ def wiideck(actionmatrix, thresh, xtras):
         
         diffx = curr[0] - last[0]
         diffz = curr[2] - last[2]
-        last = tuple(curr)
+        last = tuple(curr[i] for i in range(3))
 
         if now - saved > cooldown:
 
@@ -73,9 +76,11 @@ def wiideck(actionmatrix, thresh, xtras):
 
         for bt in xtras:
             if wm.buttons[bt]:
+                wm.rumbler.rumble(0.2)
                 execute(xtras[bt])
                 while wm.buttons[bt]:
                     time.sleep(1/50)
+                release(xtras[bt])
         
 
         if act != -1:
@@ -88,7 +93,18 @@ def wiideck(actionmatrix, thresh, xtras):
             saved = time.time()
         
         time.sleep(1/50)
-
+        
 def execute(action):
     if action[0] == K: actions.bind(action[1])
     else: actions.sfx(action[1])
+
+def release(action):
+    if action[0] == K: actions.unbind(action[1])
+
+def wiimac(actionmatrix, thresh, xtras):
+    import macwiimote as wiimote
+    
+    input("Connect WiiMote with WiiMacMote and pres enter...")
+    wm = wiimote.connect()
+    
+    mainloop(actionmatrix, thresh, xtras, wm)
