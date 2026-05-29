@@ -1,6 +1,5 @@
 from wiideck import *
 import sys
-from pynput.keyboard import Key
 
 threshold = 2.3 #g
 
@@ -14,7 +13,10 @@ cmds = [[None, None, None, None],                       # no presses
 
 # button-based macros
 
-macros = {"Home" : [K,[Key.ctrl, Key.up]],
+if sys.platform != 'darwin':
+    from inputtranslation import Key
+
+macros = {"Home" : [K,[Key.ctrl, Key.down]],
           "Minus": [K,[Key.ctrl, Key.left]],
           "Plus" : [K,[Key.ctrl, Key.right]],
           "Left" : [K,[Key.left]],

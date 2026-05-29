@@ -23,6 +23,8 @@ def wiideck(actionmatrix, thresh, xtras):
     input("Press SYNC, then hit enter... ")
     mote = wiimote.find()[0]
     wm = wiimote.connect(mote[0])
+
+    print("connected!")
     
     mainloop(actionmatrix, thresh, xtras, wm)
     
@@ -80,12 +82,11 @@ def mainloop(actionmatrix, thresh, xtras, wm):
                 execute(xtras[bt])
                 while wm.buttons[bt]:
                     time.sleep(1/50)
-                release(xtras[bt])
-        
 
         if act != -1:
             res = actionmatrix[mod][act]
             if res is not None:
+                wm.rumbler.rumble(0.2)
                 execute(res)
 
         if d:
@@ -98,13 +99,12 @@ def execute(action):
     if action[0] == K: actions.bind(action[1])
     else: actions.sfx(action[1])
 
-def release(action):
-    if action[0] == K: actions.unbind(action[1])
-
 def wiimac(actionmatrix, thresh, xtras):
     import macwiimote as wiimote
     
-    input("Connect WiiMote with WiiMacMote and pres enter...")
+    input("Connect WiiMote with WiiMacMote and press enter...")
     wm = wiimote.connect()
     
+    print("connected!")
+
     mainloop(actionmatrix, thresh, xtras, wm)
