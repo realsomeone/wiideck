@@ -11,10 +11,10 @@ cmds = [[None, None, None, None],                       # no presses
         [[S, "sfx/heavenly-music.wav"], [S,"sfx/air-horn.mp3"], [S,"sfx/vine-boom.wav"], None],    # B press
         [None, None, [S, "sfx/mmm-6.mp3"], None],]         # A + B
 
-# button-based macros
+if sys.platform != 'darwin': from inputtranslation import Key
+else: from pynput.keyboard import Key
 
-if sys.platform != 'darwin':
-    from inputtranslation import Key
+# button-based macros
 
 macros = {"Home" : [K,[Key.ctrl, Key.down]],
           "Minus": [K,[Key.ctrl, Key.left]],
