@@ -57,8 +57,8 @@ class Buttons(object):
         "Minus": 0x0010,
         "A":     0x0008,
         "B":     0x0004,
-        "1":     0x0002,
-        "2":     0x0001,
+        "One":   0x0002,
+        "Two":   0x0001,
     }
 
     def __init__(self, wiimote):
